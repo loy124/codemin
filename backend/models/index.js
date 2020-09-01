@@ -28,5 +28,4 @@ Post.associate(db);
 Menu.associate(db);
 Image.associate(db);
 
-
 module.exports = db;
