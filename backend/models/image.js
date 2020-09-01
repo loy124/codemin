@@ -16,7 +16,7 @@ module.exports = class Image extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        image: {
+        src: {
           type: Sequelize.TEXT
           
         }

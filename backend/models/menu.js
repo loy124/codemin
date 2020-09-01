@@ -10,7 +10,7 @@ module.exports = class Menu extends Sequelize.Model {
           unique: true,
         },
         category:{
-            type:Sequelize.INTEGER(200)
+            type:Sequelize.STRING(200)
         }
 
       },

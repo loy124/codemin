@@ -1,6 +1,6 @@
 const express = require("express");
 const { upload } = require("../utils/multer");
-const { Post, sequelize } = require("../models");
+const { Post, sequelize, Menu, Image } = require("../models");
 const fs = require("fs");
 const router = express.Router();
 
@@ -23,7 +23,45 @@ router.post("/", upload.array("files"), async (req, res) => {
       },
       { transaction: transaction }
     );
-    throw new Error();
+    console.log(post.dataValues.id);
+    const { menuTitle, category } = req.body;
+    console.log(menuTitle, category);
+    const menu = await Menu.create(
+      {
+        title: menuTitle,
+        category: category,
+        post_id: post.dataValues.id,
+      },
+      { transaction: transaction }
+    );
+    console.log(menu.dataValues.id);
+
+    // 이제 남은게 이미지 넣기
+
+    if (req.files) {
+      await req.files.forEach((li) => {
+        Image.create({
+          src: li.path,
+          menu_id: menu.dataValues.id,
+        });
+      });
+    }
+    //     req.files.forEach(li => {
+    // await Image.create({
+    //     src : li.path,
+    //     menu_id :menu.dataValues.id
+    // },{transaction:transaction})
+    //     });
+
+    // const image = await Image.create({
+    //     src : ,
+    //     menu_id :menu.dataValues.id
+    // })
+
+    // throw new Error();
+    // 이제 메뉴등록을 해야한다
+
+    // +
     // 게시글을 작성하면
     // 게시글을 기반으로메뉴를 작성하고
     // 메뉴를 기반으로 파일을 작성하고 업로드 한다는게 정석
@@ -40,9 +78,9 @@ router.post("/", upload.array("files"), async (req, res) => {
       req.files.forEach((li) => {
         console.log(li.path);
         fs.unlink(li.path, (err) => {
-            if(err){
-                console.log(err);
-            }
+          if (err) {
+            console.log(err);
+          }
         });
       });
     }
