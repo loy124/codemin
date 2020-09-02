@@ -37,6 +37,6 @@ module.exports = class Seller extends Sequelize.Model {
     );
   }
   static associate(db){
-    db.Seller.hasMany(db.Post, {foreignKey:"seller_id", sourceKey:"id"})
+    db.Seller.hasMany(db.Room, {foreignKey:"seller_id", sourceKey:"id"})
   }
 };

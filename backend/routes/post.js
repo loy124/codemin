@@ -1,6 +1,6 @@
 const express = require("express");
 const { upload } = require("../utils/multer");
-const { Post, sequelize, Menu, Image } = require("../models");
+const { Room, sequelize, Option, Image } = require("../models");
 const fs = require("fs");
 const router = express.Router();
 
@@ -13,60 +13,66 @@ router.get("/", (req, res) => {
 router.post("/", upload.array("files"), async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { title, content, userId } = req.body;
-    console.log(req.files);
-    const post = await Post.create(
+    const { title, content, sellerId } = req.body;
+    console.log(req.body.title);
+    // console.log(req.files);
+    const room = await Room.create(
       {
         title: title,
         content: content,
-        user_id: userId,
+        seller_id: sellerId,
       },
       { transaction: transaction }
     );
-    console.log(post.dataValues.id);
-    const { menuTitle, category } = req.body;
-    console.log(menuTitle, category);
-    const menu = await Menu.create(
-      {
-        title: menuTitle,
-        category: category,
-        post_id: post.dataValues.id,
-      },
-      { transaction: transaction }
-    );
-    console.log(menu.dataValues.id);
-
+    console.log(room);
+    const { options } = req.body;
+    // // console.log(option);
+    // // console.log("옵션");
+    // // 옵션을 넣고
+    // forEach로하면 에러가 발생한다
+    if (options) {
+      // for (option of options) {
+      //   await Option.create(
+      //     {
+      //       item: option,
+      //       room_id: room.dataValues.id,
+      //     },
+      //     { transaction: transaction }
+      //   );
+      // }
+      await Promise.all(
+        options.map(async (li) => {
+          await Option.create(
+            {
+              item: li,
+              room_id: room.dataValues.id,
+            },
+            { transaction: transaction }
+          );
+        })
+      );
+    }
+    // 이미지를 넣는다
     // 이제 남은게 이미지 넣기
 
     if (req.files) {
-      await req.files.forEach((li) => {
-        Image.create({
-          src: li.path,
-          menu_id: menu.dataValues.id,
-        });
-      });
+      await Promise.all(
+        req.files.map(async (li) => {
+          await Image.create(
+            {
+              src: li.path,
+              room_id: room.dataValues.id,
+            },
+            { transaction: transaction }
+          );
+        })
+      );
     }
-    //     req.files.forEach(li => {
-    // await Image.create({
-    //     src : li.path,
-    //     menu_id :menu.dataValues.id
-    // },{transaction:transaction})
-    //     });
-
-    // const image = await Image.create({
-    //     src : ,
-    //     menu_id :menu.dataValues.id
-    // })
-
-    // throw new Error();
-    // 이제 메뉴등록을 해야한다
-
     // +
     // 게시글을 작성하면
     // 게시글을 기반으로메뉴를 작성하고
     // 메뉴를 기반으로 파일을 작성하고 업로드 한다는게 정석
-    console.log(post);
-    console.log(post);
+    // console.log(room);
     await transaction.commit();
     return res.json({ upload: true });
     //   이미지들은 table에 입력해야하는데

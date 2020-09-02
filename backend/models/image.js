@@ -32,7 +32,7 @@ module.exports = class Image extends Sequelize.Model {
     );
   }
    static associate(db){
-    db.Image.belongsTo(db.Menu, {foreignKey:"menu_id", targetKey:"id"});
+    db.Image.belongsTo(db.Room, {foreignKey:"room_id", targetKey:"id"});
    }
 
 };

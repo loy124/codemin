@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(morgan("dev"));
 
-sequelize.sync({force: true}).then(() => console.log("db 접속 성공")).catch(err => console.log(err));
+sequelize.sync({force: false}).then(() => console.log("db 접속 성공")).catch(err => console.log(err));
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);

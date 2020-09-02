@@ -10,14 +10,14 @@ const Sequelize = require("sequelize");
 // 게시글등록시 -> 메뉴들을 등록하고(메뉴가 가지고있어야할 정보는 메뉴의 이름 ) -> 메뉴들을 기반으로 이미지를 등록한다 
 //따라서 게시글들을 메뉴들을 가지고 있고 메뉴들을 올릴때 이미지들을 다중으로 업로드한다.
 // 
-module.exports = class Post extends Sequelize.Model {
+module.exports = class Room extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
         title: {
           type: Sequelize.STRING(200),
           allowNull: false,
-          unique: true,
+        
         },
         content: {
           type: Sequelize.STRING(200),
@@ -36,8 +36,9 @@ module.exports = class Post extends Sequelize.Model {
     );
   }
    static associate(db){
-    db.Post.belongsTo(db.Seller, {foreignKey:"seller_id", targetKey:"id"});
-    db.Post.hasMany(db.Menu, {foreignKey:"post_id", sourceKey:"id"});
+    db.Room.belongsTo(db.Seller, {foreignKey:"seller_id", targetKey:"id"});
+    db.Room.hasMany(db.Option, {foreignKey:"room_id", sourceKey:"id"});
+    db.Room.hasMany(db.Image, {foreignKey:"room_id", sourceKey:"id"});
    }
 
 };

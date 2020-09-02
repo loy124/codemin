@@ -1,18 +1,13 @@
 const Sequelize = require("sequelize");
 
-module.exports = class Menu extends Sequelize.Model {
+module.exports = class Option extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        title: {
+        item: {
           type: Sequelize.STRING(200),
-          allowNull: false,
-          unique: true,
         },
-        category:{
-            type:Sequelize.STRING(200)
-        }
-
+      
       },
       {
         sequelize, //해당 부분에 db.sequelize 객체가 들어간다.
@@ -26,8 +21,8 @@ module.exports = class Menu extends Sequelize.Model {
   }
    static associate(db){
     // 이미지들을 가지고 있어야한다.
-    db.Menu.belongsTo(db.Post, {foreignKey:"post_id", targetKey:"id"});
-    db.Menu.hasMany(db.Image, {foreignKey:"menu_id", sourceKey:"id"});
+    db.Option.belongsTo(db.Room, {foreignKey:"room_id", targetKey:"id"});
+    
    }
 
 };
