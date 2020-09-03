@@ -11,6 +11,11 @@ export const userApi = {
       name,
     });
   },
+  loginUser:(email,password) =>{
+      return request.post("/user/login", {
+          email,password
+      })
+  }
 };
 
 export const sellerApi = {
@@ -21,4 +26,10 @@ export const sellerApi = {
       name,
     });
   },
+  loginSeller:(email,password) =>{
+    return request.post("/seller/login", {
+        email,password
+    })
+}
+  
 };

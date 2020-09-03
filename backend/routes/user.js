@@ -41,7 +41,7 @@ router.post("/login",async(req, res) => {
     
         // 암호화된 비밀번호를 가져온다.
         const userData = await User.findOne({
-          attributes: ["id", "password"],
+          attributes: ["id", "password", "name"],
           where: {
             email: email,
           },
@@ -52,7 +52,7 @@ router.post("/login",async(req, res) => {
         const compareResult = await comparePassword(password, hashedPassword);
         console.log(compareResult);
         if (compareResult) {
-          return res.json({ login: true, id: userData.dataValues.id });
+          return res.json({ login: true, id: userData.dataValues.id, auth:3, name: userData.dataValues.name});
         } else {
           throw new Error();
         }

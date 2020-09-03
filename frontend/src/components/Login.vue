@@ -30,7 +30,9 @@
               </b-form-checkbox>
             </div>
             <button @click="login" class="login-button">로그인</button>
-            <button @click="moveSignup" class="mt-2 login-button bg-warning">회원가입</button>
+            <button @click="moveSignup" class="mt-2 login-button bg-warning">
+              회원가입
+            </button>
           </div>
         </div>
       </div>
@@ -39,7 +41,8 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
+import { userApi, sellerApi } from "../utils/axios";
 export default {
   data() {
     return {
@@ -49,14 +52,46 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["SET_LOGIN_MODAL", "SET_REGISTER_MODAL"]),
-    login() {},
-    moveSignup(){
-      this.SET_REGISTER_MODAL(true);
-    },close(){
+    ...mapMutations([
+      "SET_LOGIN_MODAL",
+      "SET_REGISTER_MODAL",
+      "SET_LOGIN_DATA",
+    ]),
+    async login() {
+      if (this.id && this.password) {
+        if (this.seller) {
+          // await
+          const { data } = await sellerApi.loginSeller(this.id, this.password);
+          console.log(data);
+          sessionStorage.setItem("id", data.id);
+          sessionStorage.setItem("auth", data.auth);
+          sessionStorage.setItem("name", data.name);
+          this.SET_LOGIN_DATA({
+            id: data.id,
+            name: data.name,
+          });
+        } else {
+          const { data } = await userApi.loginUser(this.id, this.password);
+          console.log(data);
+          sessionStorage.setItem("id", data.id);
+          sessionStorage.setItem("auth", data.auth);
+          sessionStorage.setItem("name", data.name);
+          this.SET_LOGIN_DATA({
+            id: data.id,
+            name: data.name,
+          });
+        }
+      } else {
+        alert("아이디및 비밀번호를 다시 입력해주세요");
+      }
       this.SET_LOGIN_MODAL(false);
-    }
-    
+    },
+    moveSignup() {
+      this.SET_REGISTER_MODAL(true);
+    },
+    close() {
+      this.SET_LOGIN_MODAL(false);
+    },
   },
 };
 </script>

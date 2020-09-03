@@ -16,11 +16,11 @@
           <li>방내놓기</li>
         </ul>
         <ul class="d-flex ml-5 text-secondary">
-          <li v-if="!loginData" @click="SET_LOGIN_MODAL(true)">
+          <li v-if="!loginData.id" @click="SET_LOGIN_MODAL(true)">
             회원가입 · 로그인
           </li>
           <div class="d-flex" v-else>
-            <li>홍길동님 환영합니다</li>
+            <li>{{loginData.name}}님 환영합니다</li>
             <li @click="logout" class="ml-3">로그아웃</li>
           </div>
         </ul>

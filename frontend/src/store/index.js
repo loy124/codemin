@@ -9,7 +9,10 @@ export default new Vuex.Store({
       login:false,
       register:false
     },
-    loginData: sessionStorage.getItem("id") ? sessionStorage.getItem("id") : false
+    loginData: {
+      id:sessionStorage.getItem("id") ? sessionStorage.getItem("id") : false,
+      name:sessionStorage.getItem("name") ? sessionStorage.getItem("name") : false,
+    }
   },
   mutations: {
     SET_LOGIN_MODAL(state, data){
