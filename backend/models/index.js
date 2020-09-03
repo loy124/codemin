@@ -6,6 +6,7 @@ const Room = require("./room");
 const Menu = require("./option");
 const Image = require("./image");
 const Option = require('./option');
+const User = require('./user');
 
 
 const db = {};
@@ -14,18 +15,21 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 db.sequelize = sequelize;
 
+db.User = User;
 db.Seller = Seller;
 db.Room = Room;
 db.Menu = Menu;
 db.Option = Option;
 db.Image = Image;
 
+User.init(sequelize);
 Seller.init(sequelize);
 Room.init(sequelize);
 Menu.init(sequelize);
 Option.init(sequelize);
 Image.init(sequelize);
 
+User.associate(db);
 Seller.associate(db);
 Room.associate(db);
 Menu.associate(db);

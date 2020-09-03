@@ -14,6 +14,7 @@ router.post("/",async(req, res) => {
         console.log("hello");
         console.log(req.body);
         const { email, password, name } = req.body;
+        console.log(email);
         
         if (email && password && name) {
           const hashedPassword = await hashPassword(password);

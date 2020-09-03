@@ -1,6 +1,7 @@
 const express = require("express");
 const {hashPassword, comparePassword} = require("../utils/bcrypt");
 const router = express.Router();
+const { User } = require("../models");
 
 router.get("/", (req, res) => {
     return res.json({hello:"broker"});
@@ -13,7 +14,7 @@ router.post("/",async(req, res) => {
         console.log(req.body);
         const { email, password, name } = req.body;
         if (email && password && name) {
-          const hashedPassword = await hashedPassword(password);
+          const hashedPassword = await hashPassword(password);
           console.log(hashedPassword);
           const data = await User.create({
             email: email,
