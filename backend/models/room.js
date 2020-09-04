@@ -21,8 +21,12 @@ module.exports = class Room extends Sequelize.Model {
         },
         content: {
           type: Sequelize.STRING(200),
-          allowNull: false,
+          
         },
+        address:{
+          type:Sequelize.TEXT,
+          allowNull:false
+        }
 
       },
       {

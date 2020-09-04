@@ -12,15 +12,19 @@
       <div class="d-flex align-items-center">
         <ul class="d-flex">
           <li>방찾기</li>
-          <li>관심목록</li>
-          <li>방내놓기</li>
+          <!-- {{loginData.auth}} -->
+
+          <li v-if="Number(loginData.auth) === 3">관심목록</li>
+          <li @click="$router.push('/post')" v-if="Number(loginData.auth) === 2">
+            방내놓기
+          </li>
         </ul>
         <ul class="d-flex ml-5 text-secondary">
           <li v-if="!loginData.id" @click="SET_LOGIN_MODAL(true)">
             회원가입 · 로그인
           </li>
           <div class="d-flex" v-else>
-            <li>{{loginData.name}}님 환영합니다</li>
+            <li>{{ loginData.name }}님 환영합니다</li>
             <li @click="logout" class="ml-3">로그아웃</li>
           </div>
         </ul>
@@ -32,7 +36,6 @@
   </div>
 </template>
 <script>
-
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { mapMutations, mapState } from "vuex";
@@ -50,6 +53,7 @@ export default {
       sessionStorage.removeItem("id");
       this.SET_LOGIN_DATA("");
     },
+  
   },
 };
 </script>
@@ -65,11 +69,11 @@ ul {
   font-weight: 400;
   list-style: none;
 }
-ul > li:hover {
+ul li:hover {
   color: #1564f9;
   cursor: pointer;
 }
-ul > li:not(:first-child) {
+ul li:not(:first-child) {
   margin-left: 20px;
 }
 .router-link-exact-active {

@@ -69,6 +69,7 @@ export default {
           this.SET_LOGIN_DATA({
             id: data.id,
             name: data.name,
+            auth: data.auth ,
           });
         } else {
           const { data } = await userApi.loginUser(this.id, this.password);
@@ -79,6 +80,7 @@ export default {
           this.SET_LOGIN_DATA({
             id: data.id,
             name: data.name,
+            auth: data.auth ,
           });
         }
       } else {

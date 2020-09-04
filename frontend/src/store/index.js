@@ -11,6 +11,7 @@ export default new Vuex.Store({
     },
     loginData: {
       id:sessionStorage.getItem("id") ? sessionStorage.getItem("id") : false,
+      auth:sessionStorage.getItem("auth") ? sessionStorage.getItem("auth") : false,
       name:sessionStorage.getItem("name") ? sessionStorage.getItem("name") : false,
     }
   },

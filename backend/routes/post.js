@@ -144,23 +144,24 @@ router.put("/:id/image", upload.array("files"), async (req, res) => {
     }
     console.log(srcs);
     transaction.commit();
-    return res.json({update: true})
+    return res.json({ update: true });
   } catch (error) {
     await transaction.rollback();
-    return res.json({update: false});
+    return res.json({ update: false });
   }
 });
 
 router.post("/", upload.array("files"), async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { title, content, sellerId } = req.body;
+    const { title, content, sellerId, address } = req.body;
     console.log(req.body.title);
     // console.log(req.files);
     const room = await Room.create(
       {
         title: title,
         content: content,
+        address: address,
         seller_id: sellerId,
       },
       { transaction: transaction }
