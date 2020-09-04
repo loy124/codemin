@@ -53,6 +53,7 @@ router.post("/login", async (req, res) => {
     // 비밀번호와 암호화된 비밀번호를 대조해야합니다
     const compareResult = await comparePassword(password, hashedPassword);
     console.log(compareResult);
+  
     if (compareResult) {
       return res.json({
         login: true,

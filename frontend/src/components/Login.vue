@@ -63,25 +63,33 @@ export default {
           // await
           const { data } = await sellerApi.loginSeller(this.id, this.password);
           console.log(data);
-          sessionStorage.setItem("id", data.id);
-          sessionStorage.setItem("auth", data.auth);
-          sessionStorage.setItem("name", data.name);
-          this.SET_LOGIN_DATA({
-            id: data.id,
-            name: data.name,
-            auth: data.auth ,
-          });
+          if (data.login) {
+            sessionStorage.setItem("id", data.id);
+            sessionStorage.setItem("auth", data.auth);
+            sessionStorage.setItem("name", data.name);
+            this.SET_LOGIN_DATA({
+              id: data.id,
+              name: data.name,
+              auth: data.auth,
+            });
+          }else{
+            alert("로그인에 실패하였습니다")
+          }
         } else {
           const { data } = await userApi.loginUser(this.id, this.password);
           console.log(data);
-          sessionStorage.setItem("id", data.id);
-          sessionStorage.setItem("auth", data.auth);
-          sessionStorage.setItem("name", data.name);
-          this.SET_LOGIN_DATA({
-            id: data.id,
-            name: data.name,
-            auth: data.auth ,
-          });
+          if (data.login) {
+            sessionStorage.setItem("id", data.id);
+            sessionStorage.setItem("auth", data.auth);
+            sessionStorage.setItem("name", data.name);
+            this.SET_LOGIN_DATA({
+              id: data.id,
+              name: data.name,
+              auth: data.auth,
+            });
+          }else{
+            alert("로그인에 실패하였습니다")
+          }
         }
       } else {
         alert("아이디및 비밀번호를 다시 입력해주세요");
