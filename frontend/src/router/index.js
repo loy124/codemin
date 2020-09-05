@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Main from '../views/Main.vue'
 import Post from '../views/Post.vue'
+import List from '../views/List.vue'
 
 Vue.use(VueRouter)
 
@@ -16,7 +16,12 @@ Vue.use(VueRouter)
     path:'/post',
     name:'Post',
     component:Post
-  }
+  },
+  {
+    path:'/list',
+    name:'List',
+    component:List
+  },
 ]
 
 const router = new VueRouter({

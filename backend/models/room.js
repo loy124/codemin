@@ -26,6 +26,12 @@ module.exports = class Room extends Sequelize.Model {
         address:{
           type:Sequelize.TEXT,
           allowNull:false
+        },
+        latitude:{
+          type: Sequelize.STRING(200),
+        },
+        longitude:{
+          type: Sequelize.STRING(200),
         }
 
       },

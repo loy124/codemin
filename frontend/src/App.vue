@@ -11,7 +11,7 @@
       </div>
       <div class="d-flex align-items-center">
         <ul class="d-flex">
-          <li>방찾기</li>
+          <li @click="$router.push('/list')">방찾기</li>
           <!-- {{loginData.auth}} -->
 
           <li v-if="Number(loginData.auth) === 3">관심목록</li>

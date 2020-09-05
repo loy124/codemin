@@ -1,17 +1,41 @@
 const express = require("express");
 const { upload } = require("../utils/multer");
 const { Room, sequelize, Option, Image } = require("../models");
-const fs = require("fs");
+const fs = require("fs").promises;
 const router = express.Router();
 
 // 전체 게시글 얻기
 router.get("/", async (req, res) => {
+ try {
   const data = await Room.findAll({
     include: [{ model: Option }, { model: Image }],
   });
-  console.log(data);
+  // const file = await fs.readFile("uploads/bg-sky&&1599284550236.jpg")
+  // console.log(file);
   return res.json({ room: data });
+ } catch (error) {
+   console.log(error);
+  return res.json({ room: false });
+ }
 });
+
+router.get("/images", async(req, res) => {
+  // 파일을 읽어서
+  try {
+    // console.log("오나");
+    // console.log(req.params);
+    console.log("오나");
+    console.log(req.query.src);
+    console.log("오나");
+    const file = await fs.readFile(req.query.src);
+  
+    // console.log(req.query);
+    return res.send(file);
+  } catch (error) {
+    return res.json({upload: false})
+  }
+});
+
 // 본인이 올린 게시글 얻기
 router.get("/:id", async (req, res) => {
   const data = await Room.findOne({
@@ -62,6 +86,7 @@ router.patch("/:id", async (req, res) => {
   // 기존파일도 업데이트해줘야한다.
 });
 
+
 router.put("/:id/option", async (req, res) => {
   // 수행해야할 로직
 
@@ -96,6 +121,7 @@ router.put("/:id/option", async (req, res) => {
     return res.json({ update: false });
   }
 });
+
 
 router.put("/:id/image", upload.array("files"), async (req, res) => {
   // 파일읽어와서 지우고 파일도 지우고
@@ -154,45 +180,49 @@ router.put("/:id/image", upload.array("files"), async (req, res) => {
 router.post("/", upload.array("files"), async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { title, content, sellerId, address } = req.body;
-    console.log(req.body.title);
-    // console.log(req.files);
+    const { title, content, seller_id, address, latitude, longitude } = req.body;
+    console.log(req.files);
+    console.log("도달");
     const room = await Room.create(
       {
         title: title,
         content: content,
         address: address,
-        seller_id: sellerId,
+        seller_id: seller_id,
+        longitude: longitude,
+        latitude: latitude,
       },
       { transaction: transaction }
     );
     console.log(room);
     const { options } = req.body;
-    // // console.log(option);
+    console.log(options);
+    console.log(typeof options);
     // // console.log("옵션");
     // // 옵션을 넣고
     // forEach로하면 에러가 발생한다
     if (options) {
-      // for (option of options) {
-      //   await Option.create(
-      //     {
-      //       item: option,
-      //       room_id: room.dataValues.id,
-      //     },
-      //     { transaction: transaction }
-      //   );
-      // }
-      await Promise.all(
-        options.map(async (li) => {
-          await Option.create(
-            {
-              item: li,
-              room_id: room.dataValues.id,
-            },
-            { transaction: transaction }
-          );
-        })
-      );
+      if (typeof options === "string") {
+        await Option.create(
+          {
+            item: options,
+            room_id: room.dataValues.id,
+          },
+          { transaction: transaction }
+        );
+      } else {
+        await Promise.all(
+          options.map(async (li) => {
+            await Option.create(
+              {
+                item: li,
+                room_id: room.dataValues.id,
+              },
+              { transaction: transaction }
+            );
+          })
+        );
+      }
     }
     // 이미지를 넣는다
     // 이제 남은게 이미지 넣기
@@ -219,6 +249,7 @@ router.post("/", upload.array("files"), async (req, res) => {
     return res.json({ upload: true });
     //   이미지들은 table에 입력해야하는데
   } catch (err) {
+    console.log(err);
     await transaction.rollback();
     // 롤백함과 동시에 multer의 파일들도 지워줘야 한다.
     console.log(req.files);
@@ -239,5 +270,7 @@ router.post("/", upload.array("files"), async (req, res) => {
   //   유저의 ID도 받아와야한다.
   // userId
 });
+
+
 
 module.exports = router;

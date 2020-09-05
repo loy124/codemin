@@ -11,11 +11,12 @@ export const userApi = {
       name,
     });
   },
-  loginUser:(email,password) =>{
-      return request.post("/user/login", {
-          email,password
-      })
-  }
+  loginUser: (email, password) => {
+    return request.post("/user/login", {
+      email,
+      password,
+    });
+  },
 };
 
 export const sellerApi = {
@@ -26,10 +27,33 @@ export const sellerApi = {
       name,
     });
   },
-  loginSeller:(email,password) =>{
+  loginSeller: (email, password) => {
     return request.post("/seller/login", {
-        email,password
-    })
-}
-  
+      email,
+      password,
+    });
+  },
+};
+
+export const postApi = {
+  post: (formData) => {
+    return request.post("/post", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+  getFile: (src) => {
+    return request.get(`/post/images`, {
+      params: {
+        src: src,
+      },
+      responseType: "blob",
+    });
+  },
+  getList: () => {
+    return request.get("/post", {
+      // responseType:"blob"
+    });
+  },
 };
