@@ -1,14 +1,23 @@
 const express = require("express");
 const { upload } = require("../utils/multer");
 const { Room, sequelize, Option, Image } = require("../models");
+const Sequelize = require("sequelize");
 const fs = require("fs").promises;
 const router = express.Router();
+const Op = Sequelize.Op;
 
 // 전체 게시글 얻기
 router.get("/", async (req, res) => {
  try {
+   
+   console.log(req.query);
   const data = await Room.findAll({
     include: [{ model: Option }, { model: Image }],
+    where:{
+      address: {
+        [Op.like] : `%${req.query.seachKeyword}%`
+      }
+    }
   });
   // const file = await fs.readFile("uploads/bg-sky&&1599284550236.jpg")
   // console.log(file);
@@ -38,6 +47,7 @@ router.get("/images", async(req, res) => {
 
 // 본인이 올린 게시글 얻기
 router.get("/:id", async (req, res) => {
+  
   const data = await Room.findOne({
     include: [{ model: Option }, { model: Image }],
     where: {

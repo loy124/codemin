@@ -23,7 +23,9 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await postApi.getList();
+    // console.log(this.$route.query.search);
+    // 검색 받을 때 리팩토링 진행하기
+    const { data } = await postApi.getList(this.$route.query.search);
     console.log(data);
     this.lists = data.room;
   },

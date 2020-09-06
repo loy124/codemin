@@ -51,9 +51,11 @@ export const postApi = {
       responseType: "blob",
     });
   },
-  getList: () => {
+  getList: (seachKeyword = "") => {
     return request.get("/post", {
-      // responseType:"blob"
+      params: {
+        seachKeyword: seachKeyword,
+      },
     });
   },
 };
